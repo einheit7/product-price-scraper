@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 가격 조사</title>
+    <script>
+        function uploadFile() {
+            let formData = new FormData();
+            let fileInput = document.getElementById("fileInput");
+            formData.append("file", fileInput.files[0]);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => alert("오류 발생: " + error));
+        }
+
+        function startSearch() {
+            fetch('/search', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => alert(data.message))
+                .catch(error => alert("오류 발생: " + error));
+
+            startLogStreaming();
+        }
+
+        function startLogStreaming() {
+            const logArea = document.getElementById("logArea");
+            logArea.innerHTML = "검색 진행 중...\n";
+
+            fetch('/logs')
+                .then(response => response.body.getReader())
+                .then(reader => {
+                    function read() {
+                        reader.read().then(({ done, value }) => {
+                            if (done) return;
+                            logArea.innerHTML += new TextDecoder().decode(value);
+                            logArea.scrollTop = logArea.scrollHeight;
+                            read();
+                        });
+                    }
+                    read();
+                })
+                .catch(error => console.error("로그 스트리밍 오류:", error));
+        }
+    </script>
+</head>
+<body>
+    <h1>상품 가격 조사</h1>
+    <input type="file" id="fileInput">
+    <button onclick="uploadFile()">파일 업로드</button>
+    <button onclick="startSearch()">조사 시작</button>
+
+    <h2>진행 상황</h2>
+    <pre id="logArea" style="border: 1px solid #000; padding: 10px; height: 300px; overflow-y: scroll;"></pre>
+</body>
+</html>
+<button id="download-btn">결과 파일 다운로드</button>
+
+<script>
+document.getElementById("download-btn").addEventListener("click", function() {
+    window.location.href = "/download";
+});
+</script>
