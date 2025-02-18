@@ -26,13 +26,19 @@ def get_driver():
     options.add_argument("--disable-gpu")
     options.add_argument("--remote-debugging-port=9222")
 
+    # ✅ Docker 컨테이너 내에서 Chrome 실행
+    options.binary_location = "/usr/bin/google-chrome"
+
+    # ✅ ChromeDriver 실행 파일 경로 설정
+    service = Service("/usr/bin/chromedriver")
+    
     # ✅ Render 환경에서 Chromium 실행 경로 지정
 #    options.binary_location = "/usr/bin/chromium"
 
     # ✅ ChromeDriver 설정
 #    service = Service("/usr/bin/chromedriver")  # 직접 경로 지정
     # ✅ WebDriver Manager를 사용하여 ChromeDriver 설치 및 실행
-    service = Service(ChromeDriverManager().install())
+#    service = Service(ChromeDriverManager().install())
     
     return webdriver.Chrome(service=service, options=options)
 
