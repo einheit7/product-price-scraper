@@ -11,6 +11,29 @@ from selenium.webdriver.chrome.options import Options
 from flask import Flask, request, render_template, jsonify, Response, send_file
 import threading
 
+#from selenium import webdriver
+#from selenium.webdriver.chrome.service import Service
+#from selenium.webdriver.chrome.options import Options
+#from webdriver_manager.chrome import ChromeDriverManager
+#import os
+
+def get_driver():
+    options = Options()
+    options.add_argument("--headless")  # GUI 없이 실행
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--remote-debugging-port=9222")
+    
+    # **Render 환경에서 Chrome 실행 경로 설정**
+    options.binary_location = "/usr/bin/chromium"
+
+    # ChromeDriver 설정
+    service = Service(ChromeDriverManager().install())
+
+    return webdriver.Chrome(service=service, options=options)
+
+
 UPLOAD_FOLDER = "uploads"
 ALLOWED_EXTENSIONS = {"xlsx"}
 RESULT_FILE = "상품가격조사.xlsx"
@@ -120,7 +143,8 @@ def search_product_on_site(query, site):
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.5481.178 Safari/537.36")
 
-    driver = webdriver.Chrome(service=Service("chromedriver.exe"), options=options)
+#    driver = webdriver.Chrome(service=Service("chromedriver.exe"), options=options)
+    driver = get_driver()
 
     try:
         driver.get(url)
@@ -196,6 +220,7 @@ def process_product_list():
             log_message(f"➡️ [{site}] 검색 중...")
             result = search_product_on_site(query, site)
             result_data[f"{site}_가격"] = result["가격"]
+            result_data[f"{site}_상품명"] = result["상품명명"]
             result_data[f"{site}_출처"] = result["출처"]
 
             # **로그 메시지에 검색된 상품명과 가격 포함**
@@ -211,7 +236,7 @@ def process_product_list():
             result_data["최고가격"] = max(prices)
             result_data["최저가격"] = min(prices)
             result_data["평균가격"] = np.mean(prices)
-            result_data["표준편차"] = np.std(prices)
+#            result_data["표준편차"] = np.std(prices)
             result_data["변동계수"] = np.std(prices) / np.mean(prices)
         results.append(result_data)
         search_status["completed"] += 1
