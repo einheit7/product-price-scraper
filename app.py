@@ -18,7 +18,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 #import os
 
 def get_driver():
-    """ Selenium WebDriver 설정 """
+    """ Selenium WebDriver 설정 (Docker 환경에서 실행 가능) """
     options = Options()
     options.add_argument("--headless")  # GUI 없이 실행
     options.add_argument("--no-sandbox")
@@ -26,22 +26,14 @@ def get_driver():
     options.add_argument("--disable-gpu")
     options.add_argument("--remote-debugging-port=9222")
 
-    # ✅ Docker 환경에서 Chrome 실행 경로 직접 지정
-    options.binary_location = "/opt/bin/google-chrome"
+    # ✅ Docker 환경에서 기본 제공되는 Chrome 사용
+    options.binary_location = "/usr/bin/google-chrome"
 
     # ✅ ChromeDriver 실행 파일 경로 설정
-    service = Service("/usr/bin/chromedriver")
-    
-    # ✅ Render 환경에서 Chromium 실행 경로 지정
-#    options.binary_location = "/usr/bin/chromium"
+    service = Service("/usr/local/bin/chromedriver")
 
-    # ✅ ChromeDriver 설정
-#    service = Service("/usr/bin/chromedriver")  # 직접 경로 지정
-    # ✅ WebDriver Manager를 사용하여 ChromeDriver 설치 및 실행
-#    service = Service(ChromeDriverManager().install())
-    
     return webdriver.Chrome(service=service, options=options)
-
+    
 UPLOAD_FOLDER = "uploads"
 ALLOWED_EXTENSIONS = {"xlsx"}
 RESULT_FILE = "상품가격조사.xlsx"
