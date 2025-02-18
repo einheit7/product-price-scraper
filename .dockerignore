@@ -1,14 +1,14 @@
-# ❌ Python 캐시 파일 제거
+# ❌ Python 캐시 파일 제외
 __pycache__/
 *.pyc
 *.pyo
 
-# ❌ IDE 설정 파일 제거 (VSCode, PyCharm 등)
+# ❌ IDE 설정 파일 제외 (VSCode, PyCharm 등)
 .vscode/
 .idea/
 
-# ❌ 가상 환경 제거
-venv/
+# ❌ 가상 환경 제외
+.venv/
 .env
 
 # ❌ 빌드 관련 불필요한 파일 제거
@@ -16,6 +16,6 @@ venv/
 *.sqlite3
 *.db
 
-# ❌ 업로드된 데이터 파일 제거
-uploads/
-*.xlsx
+# ❌ 실행 스크립트 및 불필요한 바이너리 제거
+render-build.sh
+chromedriver.exe
