@@ -27,7 +27,7 @@ def get_driver():
     options.add_argument("--remote-debugging-port=9222")
 
     # ✅ Docker 환경에서 Chrome 실행 경로 직접 지정
-    options.binary_location = "/opt/google/chrome/google-chrome"
+    options.binary_location = "/opt/bin/google-chrome"
 
     # ✅ ChromeDriver 실행 파일 경로 설정
     service = Service("/usr/bin/chromedriver")
