@@ -5,7 +5,7 @@ FROM selenium/standalone-chrome:124.0
 WORKDIR /app
 
 # ✅ 시스템 패키지 업데이트 및 Python 설치
-RUN apt-get update && apt-get install -y python3 python3-pip
+#RUN apt-get update && apt-get install -y python3 python3-pip
 
 # ✅ 프로젝트 코드 및 의존성 복사
 COPY . /app
