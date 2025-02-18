@@ -27,10 +27,13 @@ def get_driver():
     options.add_argument("--remote-debugging-port=9222")
 
     # ✅ Render 환경에서 Chromium 실행 경로 지정
-    options.binary_location = "/usr/bin/chromium"
+#    options.binary_location = "/usr/bin/chromium"
 
     # ✅ ChromeDriver 설정
-    service = Service("/usr/bin/chromedriver")  # 직접 경로 지정
+#    service = Service("/usr/bin/chromedriver")  # 직접 경로 지정
+    # ✅ WebDriver Manager를 사용하여 ChromeDriver 설치 및 실행
+    service = Service(ChromeDriverManager().install())
+    
     return webdriver.Chrome(service=service, options=options)
 
 UPLOAD_FOLDER = "uploads"
