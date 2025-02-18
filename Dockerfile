@@ -1,5 +1,5 @@
 # ✅ Chrome 및 ChromeDriver가 포함된 공식 이미지 사용
-FROM selenium/standalone-chrome:latest
+FROM selenium/standalone-chrome:124.0
 
 # ✅ 작업 디렉토리 설정
 WORKDIR /app
