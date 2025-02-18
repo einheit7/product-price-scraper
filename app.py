@@ -18,21 +18,20 @@ from webdriver_manager.chrome import ChromeDriverManager
 #import os
 
 def get_driver():
+    """ Selenium WebDriver 설정 """
     options = Options()
     options.add_argument("--headless")  # GUI 없이 실행
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
     options.add_argument("--remote-debugging-port=9222")
-    
-    # **Render 환경에서 Chrome 실행 경로 설정**
+
+    # ✅ Render 환경에서 Chromium 실행 경로 지정
     options.binary_location = "/usr/bin/chromium"
 
-    # ChromeDriver 설정
-    service = Service(ChromeDriverManager().install())
-
+    # ✅ ChromeDriver 설정
+    service = Service("/usr/bin/chromedriver")  # 직접 경로 지정
     return webdriver.Chrome(service=service, options=options)
-
 
 UPLOAD_FOLDER = "uploads"
 ALLOWED_EXTENSIONS = {"xlsx"}
